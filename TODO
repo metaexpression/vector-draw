@@ -1,0 +1,21 @@
+critical tools for making it a reasonable vector drawing/editing program
+  static slope analysis
+    mark peaks for curve points
+    some kind of filter for ignoring small changes in direction
+  actual corner nodes
+  post-metaheuristic review and alteration
+    chance to add/remove nodes, set corners
+    with the option to change how the connection to the last line was interpreted (corner, smooth)
+  drawing from already existing line endings
+  selection tool
+    at least the ability to select indiviudal points and whole curves
+      maybe with shift-click to move from point selection to curves
+  transposition tool
+
+ideal features
+  slope analysis
+    much better corner detection, current way does not work well
+  performance, computational
+    improve distance map algorithm by interpolating between line segments, it's too rough
+  performance, metaheuristic
+    add tangent-line to fitness, sourced from the analysis

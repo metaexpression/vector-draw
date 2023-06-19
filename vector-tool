@@ -1,0 +1,90 @@
+simplified vector illustration tool, focused on lines & simple shading (cel + gradients, simple filter effects)
+
+links:
+  https://svgedit.netlify.app/editor/index.html
+
+compatability with raw SVG is probably a good idea, at least for importing, if not exporting
+  shouldn't allow for the same kind of silly level of nodes inkscape tends to end up with
+
+tool to turn freehand strokes into smooth curves
+  settings for how many curves to allow in the simplification/modeling process
+    ability to mark where the curves and corners are supposed to be
+    setting for how far from the start and end points the simplified curve can wander
+  implementation of this is going to be complex, but constrained EA might be the best bet
+    maximum distance points and control points can be from the freehand line will help, probably needs to be editable as well
+    performance matters, so a cutoff on fitness improvement might be necessary
+  snapping straight line segments to common angles
+    snapping straight line segments to angles used on the page based on commonality and proximity
+      also, complimentary angles
+
+tool to combine/merge strokes to produce clean lines
+  merging at a corner or intersection
+  merging as a smooth transition, and clearing off excess overlap
+
+tool for deforming curves to match existing shapes
+  especially using hand-drawn curves to redefine existing shapes
+    e.g. rounding off corners
+  arranging selected points on a drawn curve
+
+cutting paths at path intersections
+
+some kind of optional abstraction over svg's bezier curves, more suitable for manipulation
+  circular, elliptic, superelliptic curves, but still fitting their parameters to the freehand line
+
+concept: 'crease' generator to darken/lighten with details from a curve
+
+concept: blender-style 'curve selector' as a ui element to input various things
+  e.g. the width of strokes, for a more natural-looking drawing style
+
+concept: 'stamps', patterns that can be applied to curves to add some texture
+
+concept: warping a filled surface in a pseudo-3d way to stretch details over fabric or other objects
+  e.g. clothes, fur
+  effectively a 2d gradient, from facing straight-on to oblique angles
+    but should be defined by curves
+
+concept: any gradient can be defined by a curve with a property curve that determines color by distance
+  works well for cel-shading, too
+
+concept: guassian blur for less-defined stroke-based details
+
+concept: 2d pattern arrangement, similar to the curve-based generation rules
+
+freehand vectorizing implementation notes:
+  performance and correctness largely depends on the initial state of the EA samples, and the weighting
+  if both control point handles are allowed to move around freely, almost every node will end up as a cusp node
+    property for how many cusps/corners to allow?
+    still need to get the EA to recognize cusps
+  almost all nodes will be smooth, meaning the control points are on a line with each other and the point itself
+  points can move away from the path itself(???)
+  'scale' parameter should be modified by the distance of the freehand line
+    if it's a tiny line, there's probably some detail there
+    if it's a giant line, it's probably a large outline
+  'smooth' nodes split a line into two curves, with the start and end having implicit control points at themselves
+  EA notes:
+    factors to vary: node position, line slope, distance of each control point
+    sometimes curves go back on themsleves, still along the path of the freehand line, need to disincentivize this somehow
+      rewarding for having a tangent-line similar to the freehand curve?
+    allow the EA to add/remove nodes and converge on the right amount?
+      requires /very/ careful balancing of negative weight from the node addition
+    penelty for control points too close to the curve node
+    penelty for curve nodes being too close to the start/end of the curve
+      especially shown in straight lines with a slight twist at the end
+    NOTE: one curve node can account for about 1pi's worth of change in slope, and usually less than that
+      *or* one change in curve direction, keep this in mind when doing the static analysis
+      even less than that, if you want to be able to draw accurate circles (pi/2 per point @ 4 points)
+        maybe some kind of exponential fallback
+
+keyboard + tools + drawing notes:
+  drawing straight lines behind a seperate tool or a modifier key (ctrl, alt)
+  different modifier key to disable snapping to interesting paths and points
+
+concept: effect to distribute stamps along a curve
+  with options for frequency, alignment, randomness, minimum spacing, repition
+  also, options to choose at random from a list of stamps, a set ordering, or a mix of the two
+
+building blocks to creating a visual pattern language for abstraction
+  think blender's shader nodes and value properties
+    everything is either a value, a curve, a point, or a position along a curve
+  control points and curves that can be added to patterns to visually alter the effect
+  other kinds of curve-based effects?

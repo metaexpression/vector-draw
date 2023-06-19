@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Source Sans Pro;
+  color: #2a2a2c;
+  background:  #fff;
+  line-height: 28px;
+  font-size: 19px;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: calc(5vw) auto;
+  width: 1200px;
+  max-width: 90%;
+}
+
+#canvas {
+  border: 1px solid #0000001a;
+  border-radius: 4px;
+}
